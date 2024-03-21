@@ -418,7 +418,7 @@ textarea.input {
 
 .header-links li {
   display: inline-block;
-  margin-right: 15px;
+  margin-right: 19px;
   font-size: 12px;
 }
 
@@ -470,7 +470,6 @@ textarea.input {
 }
 
 .header-search form .input-select {
-  margin-right: -4px;
   border-radius: 40px 0px 0px 40px;
 }
 
