@@ -12,24 +12,9 @@ require('../_inc/functions.php');
 
 		<title>Electro</title>
 
-		<!-- Google font -->
-		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-
-		<!-- Bootstrap -->
-		<link type="text/css" rel="stylesheet" href="../assets/css/bootstrap.min.css"/> 
-
-		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="../assets/css/slick.css"/>
-		<link type="text/css" rel="stylesheet" href="../assets/css/slick-theme.css"/>
-
-		<!-- nouislider -->
-		<link type="text/css" rel="stylesheet" href="../assets/css/nouislider.min.css"/>
-
-		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="../assets/css/font-awesome.min.css">
-
-		<!-- Custom stlylesheet -->
-		<link type="text/css" rel="stylesheet" href="../assets/css/style.css"/>
+		<?php
+		add_styles();
+		?>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -73,7 +58,7 @@ require('../_inc/functions.php');
 						<!-- LOGO -->
 						<div class="col-md-3">
 							<div class="header-logo">
-								<a href="#" class="logo">
+								<a href="home.php" class="logo">
 									<img src="../assets/img/logo.png" alt="">
 								</a>
 							</div>
@@ -131,29 +116,7 @@ require('../_inc/functions.php');
                                         generate_cart($cart_list);
 
                                         ?>
-										<!-- <div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="../img/product01.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
 
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product02.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-										</div> -->
 										<div class="cart-summary">
 											<small>3 Item(s) selected</small>
 											<h5>SUBTOTAL: $2940.00</h5>
@@ -193,15 +156,21 @@ require('../_inc/functions.php');
 				<!-- responsive-nav -->
 				<div id="responsive-nav">
 					<!-- NAV -->
-					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
-					</ul>
+					<?php
+					
+					$nav_list = array(
+						'home.php'=>'Home',
+						'hot-deals.php'=>'Hot Deals',
+						'#'=>'Categories',
+						'store.php'=>'Shop',
+					);
+
+					$categories = array('Laptops', 'Smartphones', 'Cameras', 'Accessories');
+
+					$menu_obj = new Menu($nav_list, $categories);
+					echo $menu_obj->generate_nav();
+					
+					?>
 					<!-- /NAV -->
 				</div>
 				<!-- /responsive-nav -->

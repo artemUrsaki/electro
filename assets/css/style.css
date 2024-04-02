@@ -72,6 +72,7 @@ a {
   font-weight: 500;
   -webkit-transition: 0.2s color;
   transition: 0.2s color;
+  cursor: pointer;
 }
 
 a:hover, a:focus {
@@ -622,11 +623,21 @@ textarea.input {
   background: #FFF;
   border-bottom: 2px solid #E4E7ED;
   border-top: 3px solid #D10024;
+  position: relative;
+}
+
+#navigation>.container {
+  height: 62px;
 }
 
 /*----------------------------*\
 	Main nav
 \*----------------------------*/
+
+#responsive-nav {
+  display: flex;
+  flex-direction: column;
+}
 
 .main-nav>li+li {
   margin-left: 30px
@@ -658,6 +669,30 @@ textarea.input {
 .header-ctn li.nav-toggle {
   display: none;
 }
+
+/* categories-nav */
+#categories-link {
+  position: static;
+}
+
+#categories-link>div {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.2s;
+  z-index: 2;
+  background-color: #E4E7ED;
+  box-shadow: 0 5px 20px -10px black;
+}
+
+#categories-link:hover>div {
+  height: 100%;
+}
+
+
 
 /*----------------------------*\
 	responsive nav
@@ -748,7 +783,7 @@ textarea.input {
 .shop .shop-img {
   position: relative;
   background-color: #E4E7ED;
-  z-index: -1;
+  z-index: -2;
 }
 
 .shop .shop-img>img {
@@ -1971,7 +2006,7 @@ textarea.input {
 
 .newsletter .newsletter-follow li {
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 9px;
 }
 
 .newsletter .newsletter-follow li:last-child {
@@ -2029,7 +2064,7 @@ textarea.input {
 }
 
 .footer-links li i {
-  margin-right: 15px;
+  margin-right: 11px;
   color: #D10024;
   width: 14px;
   text-align: center;
@@ -2047,7 +2082,7 @@ textarea.input {
 
 .footer-payments li {
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 9px;
 }
 
 .footer-payments li a {

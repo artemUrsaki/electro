@@ -7,6 +7,15 @@
 		$('#responsive-nav').toggleClass('active');
 	})
 
+	// Categories Nav toggle
+	// $(function() {
+	// 	$('#categories-link').hover(function() {
+	// 		$('.categories').addClass('active');
+	// 	}, function() {
+	// 		$('.categories').removeClass('active');
+	// 	})
+	// })
+
 	// Fix cart dropdown from closing
 	$('.cart-dropdown').on('click', function (e) {
 		e.stopPropagation();
