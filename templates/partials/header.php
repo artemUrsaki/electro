@@ -1,7 +1,6 @@
 <?php
-require('../_inc/functions.php');
+require_once('../_inc/config.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -13,15 +12,17 @@ require('../_inc/functions.php');
 		<title>Electro</title>
 
 		<?php
-		add_styles();
+		$page = basename($_SERVER['SCRIPT_NAME']);
+		$page_obj = new Page($page);
+		echo $page_obj->add_styles();
 		?>
 
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+		WARNING: Respond.js doesn't work if you view the page via file://
+		[if lt IE 9]> -->
+		<!-- <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> -->
+		<!-- [endif] -->
     </head>
     <body>
 		<!-- HEADER -->
@@ -31,20 +32,33 @@ require('../_inc/functions.php');
 				<div class="container">
                     <?php
                     
-                        $ul_list = array('left', 'right');
-                        $left_menu = array(
-                            'phone'=>'+021-95-51-84',
-                            'envelope-o'=>'email@email.com',
-                            'map-marker'=>'1734 Stonecoal Road',
-                        );
-                        $right_menu = array(
-                            'dollar'=>'USD',
-                            'user-o'=>'My Account',
-                        );
+					$categories = array('Laptops', 'Smartphones', 'Cameras', 'Accessories');
+					$nav_list = array(
+						'home.php'=>'Home',
+						'hot-deals.php'=>'Hot Deals',
+						'#'=>'Categories',
+						'store.php'=>'Shop',
+					);
+					$left_menu = array(
+						'phone'=>'+021-95-51-84',
+						'envelope-o'=>'email@email.com',
+						'map-marker'=>'1734 Stonecoal Road',
+					);
+					
+					$menu_obj = new Menu($nav_list, $categories, $left_menu);
 
-                        generate_top_header($ul_list, $left_menu, $right_menu);
+                    echo $menu_obj->generate_left_menu();
 
                     ?>
+
+					<ul class="header-links pull-right">
+						<li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>
+						<?php 
+							if(isset($_SESSION['logged-in']) && $_SESSION['logged-in'] == true) {
+								echo '<li><a href="partials/logout.php">Log Out</a></li>';
+							}
+						?>
+					</ul>
 				</div>
 			</div>
 			<!-- /TOP HEADER -->
@@ -70,13 +84,8 @@ require('../_inc/functions.php');
 							<div class="header-search">
 								<form>
                                     <?php
-
-                                        $input_list = array(
-                                            '0'=>'All Categories',
-                                            '1'=>'Category 01',
-                                            '2'=>'Category 02',
-                                        );
-                                        generate_input($input_list);
+ 
+									echo $menu_obj->generate_input();
 
                                     ?>
 									<input class="input" placeholder="Search here">
@@ -107,23 +116,20 @@ require('../_inc/functions.php');
 										<div class="qty">3</div>
 									</a>
 									<div class="cart-dropdown">
-                                        <?php
-                                        
-                                        $cart_list = array(
-                                            'product01'=>array('Headphones','$980.00'),
-                                            'product02'=>array('Laptop','$1200.00'),
-                                        );
-                                        generate_cart($cart_list);
-
-                                        ?>
-
+										<?php
+											$cart_list = array(
+												'product01'=>array('Headphones','$980.00'),
+												'product02'=>array('Laptop','$1200.00'),
+											);
+											echo($menu_obj->generate_cart($cart_list));
+										?>
 										<div class="cart-summary">
 											<small>3 Item(s) selected</small>
 											<h5>SUBTOTAL: $2940.00</h5>
 										</div>
 										<div class="cart-btns">
-											<a href="#">View Cart</a>
-											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+											<a href="cart.php">View Cart</a>
+											<a href="checkout.php">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
 								</div>
@@ -157,19 +163,7 @@ require('../_inc/functions.php');
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<?php
-					
-					$nav_list = array(
-						'home.php'=>'Home',
-						'hot-deals.php'=>'Hot Deals',
-						'#'=>'Categories',
-						'store.php'=>'Shop',
-					);
-
-					$categories = array('Laptops', 'Smartphones', 'Cameras', 'Accessories');
-
-					$menu_obj = new Menu($nav_list, $categories);
 					echo $menu_obj->generate_nav();
-					
 					?>
 					<!-- /NAV -->
 				</div>

@@ -1,20 +1,15 @@
-(function($) {
+jQuery(document).ready(function($) {
 	"use strict"
+	const maximum = $('#price-max').val();
+	const minimum = $('#price-min').val();
+
+	filter_func();
 
 	// Mobile Nav toggle
 	$('.menu-toggle > a').on('click', function (e) {
 		e.preventDefault();
 		$('#responsive-nav').toggleClass('active');
 	})
-
-	// Categories Nav toggle
-	// $(function() {
-	// 	$('#categories-link').hover(function() {
-	// 		$('.categories').addClass('active');
-	// 	}, function() {
-	// 		$('.categories').removeClass('active');
-	// 	})
-	// })
 
 	// Fix cart dropdown from closing
 	$('.cart-dropdown').on('click', function (e) {
@@ -74,34 +69,34 @@
 
 	// Product Main img Slick
 	$('#product-main-img').slick({
-    infinite: true,
-    speed: 300,
-    dots: false,
-    arrows: true,
-    fade: true,
-    asNavFor: '#product-imgs',
-  });
+		infinite: true,
+		speed: 300,
+		dots: false,
+		arrows: true,
+		fade: true,
+		asNavFor: '#product-imgs',
+  	});
 
 	// Product imgs Slick
-  $('#product-imgs').slick({
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    centerMode: true,
-    focusOnSelect: true,
-		centerPadding: 0,
-		vertical: true,
-    asNavFor: '#product-main-img',
+	$('#product-imgs').slick({
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		arrows: true,
+		centerMode: true,
+		focusOnSelect: true,
+			centerPadding: 0,
+			vertical: true,
+		asNavFor: '#product-main-img',
 		responsive: [{
-        breakpoint: 991,
-        settings: {
-					vertical: false,
-					arrows: false,
-					dots: true,
-        }
-      },
-    ]
-  });
+			breakpoint: 991,
+			settings: {
+				vertical: false,
+				arrows: false,
+				dots: true,
+			}
+      	},
+    	]
+  	});
 
 	// Product img zoom
 	var zoomMainProduct = document.getElementById('product-main-img');
@@ -112,6 +107,7 @@
 	/////////////////////////////////////////
 
 	// Input number
+	
 	$('.input-number').each(function() {
 		var $this = $(this),
 		$input = $this.find('input[type="number"]'),
@@ -124,14 +120,18 @@
 			$input.val(value);
 			$input.change();
 			updatePriceSlider($this , value)
-		})
+		});
 
 		up.on('click', function () {
+			var at = $input.attr('max');
 			var value = parseInt($input.val()) + 1;
+			if (at !== "undefined" && at !== "false") {
+				value = value > at ? at : value;
+			}
 			$input.val(value);
 			$input.change();
 			updatePriceSlider($this , value)
-		})
+		});
 	});
 
 	var priceInputMax = document.getElementById('price-max'),
@@ -147,7 +147,6 @@
 
 	function updatePriceSlider(elem , value) {
 		if ( elem.hasClass('price-min') ) {
-			console.log('min')
 			priceSlider.noUiSlider.set([value, null]);
 		} else if ( elem.hasClass('price-max')) {
 			console.log('max')
@@ -159,19 +158,56 @@
 	var priceSlider = document.getElementById('price-slider');
 	if (priceSlider) {
 		noUiSlider.create(priceSlider, {
-			start: [1, 999],
+			start: [minimum, maximum],
 			connect: true,
 			step: 1,
 			range: {
-				'min': 1,
-				'max': 999
+				'min': parseInt(minimum),
+				'max': parseInt(maximum)
 			}
 		});
 
 		priceSlider.noUiSlider.on('update', function( values, handle ) {
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
+			filter_func();
 		});
 	}
 
-})(jQuery);
+	// Filter
+	function filter_func() {
+		const category = create_filter("category-filter");
+		const brand = create_filter("brand-filter");
+		const min = $('#price-min').val();
+		const max = $('#price-max').val();
+		const page = $('#page').val();
+		const sortby = $('.sorting.input-select').find(':selected').val();
+		$.ajax({
+			url: '../_inc/config.php',
+			method:'GET',
+			data: {action:'filter', minimum:min, maximum:max, category:category, brand:brand, page:page, sortby:sortby},
+			success: function(data) {
+				var arr = data.split(' ; ');
+				$('.store-items').html(arr[0]);
+				var str = arr[1] ==  1 ? ' product' : ' products';
+				$('.store-qty').html('Showing ' + arr[1] + str);
+			},
+		});
+	}
+
+	function create_filter(value) {
+		var filter = [];
+		$('.' + value + ':checked').each(function() {
+			filter.push($(this).val());
+		});
+		return filter;
+	}
+
+	$('.check-filter').click(function() {
+		filter_func();
+	});
+
+	$('.sorting.input-select').change(function() {
+		filter_func();
+	})
+});
