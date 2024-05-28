@@ -9,6 +9,55 @@ class Reviews extends Database {
         $this->cur_page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
     }
 
+    public function add_review($user_id, $product_id, $text, $rating) {
+        try {
+            $query = "INSERT INTO `review`(user_id, product_item_id, review_text, rate) VALUES(:user_id, :product_id, :text, :rating)";
+            
+            $data = array(
+                'user_id'=>$user_id,
+                'product_id'=>$product_id,
+                'text'=>$text,
+                'rating'=>$rating,
+            );
+
+            $statement = $this->db->prepare($query);
+            $statement->execute($data);
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function edit_review($review_id, $text, $rating) {
+        try {
+            $query = "UPDATE `review` SET review_text = :text, rate = :rate WHERE review_id = :id";
+
+            $data = array(
+                'text'=>$text,
+                'rate'=>$rating,
+                'id'=>$review_id
+            );
+
+            $statement = $this->db->prepare($query);
+            $statement->execute($data);
+
+            return true;
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete_review($review_id) {
+        try {
+            $query = "DELETE FROM `review` WHERE review_id = :id";
+            $statement = $this->db->prepare($query);
+            $statement->bindParam('id', $review_id);
+            $statement->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function select($product_id) {
         try {
             $query = "SELECT * FROM user u
@@ -18,6 +67,20 @@ class Reviews extends Database {
             $pagination_obj = new Pagination(5);
             return $pagination_obj->limit_query($query, $this->cur_page, [$product_id]);
         } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function select_single($review_id) {
+        try {
+            $query = "SELECT * FROM `review` WHERE review_id = :id";
+            $statement = $this->db->prepare($query);
+            $statement->bindParam('id', $review_id);
+            $statement->execute();
+
+            $res = $statement->fetch();
+            return $res;
+        } catch(PDOException $e) {
             echo $e->getMessage();
         }
     }
@@ -44,8 +107,20 @@ class Reviews extends Database {
             </div>
             <div class="review-body">
                 <p>'. $review->review_text .'</p>
-            </div>
-            </li>';
+            </div>';
+
+            if(isset($_SESSION['logged-in']) && ($_SESSION['is-admin'] == 1 || $_SESSION['user-id'] == $review->user_id)) {
+                $res .= '<div class="product-edits">
+                <form action="edit-review.php" method="POST">
+                <button class="admin-btn" type="submit" name="review_id" value="'. $review->review_id .'"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                </form>
+                <form method="POST">
+                <button class="admin-btn" type="submit" name="review_id" value="'. $review->review_id .'"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </form>
+                </div>';
+            }
+
+            $res .= '</li>';
         }
 
         return $res;

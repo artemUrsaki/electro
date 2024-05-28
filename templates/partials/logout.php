@@ -1,6 +1,5 @@
 <?php
 require('../../_inc/config.php');
 
-unset($_SESSION['logged-in']);
-unset($_SESSION['is-admin']);
+unset($_SESSION['logged-in'], $_SESSION['is-admin'], $_SESSION['user-id']);
 header('Location: ../login.php');

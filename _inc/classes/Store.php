@@ -65,10 +65,10 @@ class Store extends Database {
         $store = $this->select();
         $product_obj = new Product();
         $res = '';
-        for ($i = 0; $i < count($store); $i++) {
+        foreach ($store as $line) {
             $res .= '<div class="col-md-4 col-xs-6">';
             
-            $res .=  $product_obj->product_construct($store, $i);
+            $res .=  $product_obj->product_construct($line);
 
             $res .= '</div>';
         }
@@ -119,7 +119,7 @@ class Store extends Database {
                 echo '<div class="input-checkbox">
                 <input type="checkbox" id="brand-' .$i .'" class="check-filter brand-filter" value="'. $res[$i]->brand .'">
                 <label for="brand-'. $i .'">
-                    <span></span>'. $res[$i]->brand .'<small>('. $res[$i]->amount .')</small>
+                    <span></span>'.  strtoupper($res[$i]->brand) .'<small>('. $res[$i]->amount .')</small>
                 </label>
                 </div>';
             }

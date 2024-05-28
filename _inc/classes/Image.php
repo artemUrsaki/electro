@@ -35,8 +35,8 @@ class Image extends Database {
             $statement->execute();
 
             $res = $statement->fetch();
-            if(!empty($res)) return true;
-            return false;
+            if(empty($res)) return false;
+            return true;
         } catch(PDOException $e) {
             echo $e->getMessage();
         }

@@ -54,10 +54,12 @@ class User extends Database {
 
             $statement = $this->db->prepare($query);
             $statement->execute($data);
+            $user = $statement->fetch();
             
             if($statement->rowCount() == 1) {
                 $_SESSION['logged-in'] = true;
-                $_SESSION['is-admin'] = $statement->fetch()->user_role;
+                $_SESSION['is-admin'] = $user->user_role;
+                $_SESSION['user-id'] = $user->user_id;
                 return true;
             }
             return false;

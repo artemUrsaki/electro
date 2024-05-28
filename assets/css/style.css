@@ -144,7 +144,7 @@ ul, ol {
 
 textarea.input {
   padding: 15px;
-  min-height: 90px;
+  min-height: 150px;
 }
 
 /*-- Number input --*/
@@ -1140,6 +1140,15 @@ textarea.input {
   visibility: visible;
 }
 
+.reviews .product-edits button, .product .product-edits button {
+  background-color: #D10024;
+  border: none;
+}
+
+.reviews .product-edits i, .product .product-edits i {
+  font-size: 1.3em;
+}
+
 /*----------------------------*\
 	Widget product
 \*----------------------------*/
@@ -1544,7 +1553,7 @@ textarea.input {
   max-height: 100%;
 }
 
-.product-preview .product-edits {
+.product-edits {
   position: absolute;
   top: 0;
   right: 0;
@@ -2336,13 +2345,14 @@ textarea.input {
 	15 -> LOG IN & REGISTER
 ===========================================================*/
 .center-form>form {
-  width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   text-align: center;
 }
 
 .center-form {
   text-align: center;
+  width: 100%;
 }
 
 .center-form>div{

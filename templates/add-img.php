@@ -9,12 +9,12 @@ if(!isset($_SESSION['is-admin']) || $_SESSION['is-admin'] == 0) {
 	die;
 }
 
-if(!isset($_POST['product_id']) || count($product_obj->get_item_imgs($_POST['product_id'])) == 0) {
+if(!isset($_POST['product_id'])) {
 	header('Location: error.php');
 	die;
 }
 
-if(isset($_POST['add-img'])) {
+if(isset($_POST['product_id'], $_POST['image'])) {
 	$img = $_POST['image'];
 	if($image_obj->add_img($_POST['product_id'], $img)) {
 		$_SESSION['img-added'] = '<p>Image is succesfully added!</p>';
@@ -51,8 +51,6 @@ include_once('partials/header.php');
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
-				<div class="row">
-                    
                     <!-- Billing Details -->
                     <div class="row">
                         <div class="center-form">
@@ -62,9 +60,8 @@ include_once('partials/header.php');
 								</div>
 								<div class="form-group">
 									<input class="input" type="text" name="image" placeholder="Image Path">
-									<input type="hidden" name="product_id" value="<?php echo $_POST['product_id'] ?>">
 								</div>
-								<button class="primary-btn" type="submit" name="add-img">Add</button>
+								<button class="primary-btn" type="submit" name="product_id" value="<?php echo $_POST['product_id'] ?>">Add</button>
 							</form>
 							<div>
                             	<a href="product.php?id=<?php echo $_POST['product_id']; ?>">Back To Product</a>
@@ -80,7 +77,6 @@ include_once('partials/header.php');
 							?>
                         </div>
                     </div>
-				</div>
 				<!-- /row -->
 			</div>
 			<!-- /container -->

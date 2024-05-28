@@ -2,6 +2,13 @@
 include_once('partials/header.php');
 $store_obj = new Store();
 $pagination_obj = new Pagination(20);
+$product_obj = new Product();
+
+if(isset($_POST['product_id'])) {
+	if(isset($_SESSION['is-admin']) && $_SESSION['is-admin'] == 1) {
+		$product_obj->delete($_POST['product_id']);
+	}
+}
 ?>
 
 		<!-- BREADCRUMB -->

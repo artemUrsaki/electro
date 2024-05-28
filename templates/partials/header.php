@@ -35,7 +35,6 @@ require_once('../_inc/config.php');
 					$categories = array('Laptops', 'Smartphones', 'Cameras', 'Accessories');
 					$nav_list = array(
 						'home.php'=>'Home',
-						'hot-deals.php'=>'Hot Deals',
 						'#'=>'Categories',
 						'store.php'=>'Shop',
 					);
@@ -52,10 +51,11 @@ require_once('../_inc/config.php');
                     ?>
 
 					<ul class="header-links pull-right">
-						<li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>
 						<?php 
 							if(isset($_SESSION['logged-in']) && $_SESSION['logged-in'] == true) {
 								echo '<li><a href="partials/logout.php">Log Out</a></li>';
+							} else {
+								echo '<li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>';
 							}
 						?>
 					</ul>
@@ -70,7 +70,7 @@ require_once('../_inc/config.php');
 					<!-- row -->
 					<div class="row">
 						<!-- LOGO -->
-						<div class="col-md-3">
+						<div class="col-md-9">
 							<div class="header-logo">
 								<a href="home.php" class="logo">
 									<img src="../assets/img/logo.png" alt="">
@@ -78,36 +78,9 @@ require_once('../_inc/config.php');
 							</div>
 						</div>
 						<!-- /LOGO -->
-
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
-                                    <?php
- 
-									echo $menu_obj->generate_input();
-
-                                    ?>
-									<input class="input" placeholder="Search here">
-									<button class="search-btn">Search</button>
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
-
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
-								<!-- Wishlist -->
-								<div>
-									<a href="#">
-										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
-								<!-- /Wishlist -->
-
 								<!-- Cart -->
 								<div class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">

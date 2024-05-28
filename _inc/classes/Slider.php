@@ -39,15 +39,24 @@ class Slider extends Database {
         }
     }
 
-    public function select_category($category) {
+    public function select_category($category, $product_id=0) {
         try {
             $query = "SELECT * FROM product_item pi
             JOIN product p ON(p.product_id = pi.product_id)
             JOIN category c ON(c.category_id = p.category)
             WHERE c.category_name = :category";
 
+            if($product_id > 0) {
+                $query .= " AND pi.id <> :product_id";
+            }
+
             $statement = $this->db->prepare($query);
             $statement->bindParam('category', $category);
+
+            if($product_id > 0) {
+                $statement->bindParam('product_id', $product_id);
+            }
+
             $statement->execute();
             $res = $statement->fetchAll();
             return $res;
@@ -75,7 +84,7 @@ class Slider extends Database {
             </div>
             </div>';
 
-            if($i % 3 == 1) {
+            if($i % 3 == 2) {
                 $res .= '</div>';
             }
         }
@@ -85,8 +94,9 @@ class Slider extends Database {
         return $res;
     }
 
-    public function get_slider_items($type) {
-        $query = '';
+    public function get_slider_items($type, $product_id=0) {
+        $query = array();
+
         switch($type) {
             case 'date':
                 $query = $this->select_date();
@@ -95,16 +105,18 @@ class Slider extends Database {
                 $query = $this->select_rating();
                 break;
             default:
-                $query = $this->select_category($type);
+                $this->select_category($type, $product_id);
         }
         
         $product_obj = new Product();
         
         $res = '';
-        for($i = 0; $i < count($query); $i++) {
-            $res .= $product_obj->product_construct($query, $i);
+        foreach($query as $line) {
+            $res .= $product_obj->product_construct($line);
         }
 
         return $res;
     }
+
+    
 }

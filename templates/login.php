@@ -2,7 +2,7 @@
 require_once('../_inc/config.php');
 
 if(isset($_SESSION['logged-in']) && $_SESSION['logged-in'] == true) {
-	header('Location: account.php');
+	header('Location: home.php');
 	die;
 }
 
@@ -12,7 +12,7 @@ if(isset($_POST['log-in'])) {
 	$password = $_POST['password'];
 
 	if($user_obj->login($email, $password)) {
-		header('Location: account.php');
+		header('Location: home.php');
 		die;
 	} else {
         $_SESSION['login-fault'] = '<p>Wrong email or password</p>';

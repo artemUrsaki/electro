@@ -2,13 +2,32 @@
 include_once('../_inc/config.php');
 
 $slider_obj = new Slider();
-$reviews_obj = new Reviews(); 
+$review_obj = new Reviews(); 
 $rating_obj = new Rating();
 $product_obj = new Product();
 $pagination_obj = new Pagination(5);
 $image_obj = new Image();
-$product = $product_obj->get_product();
+$product = $product_obj->get_product($_GET['id']);
 
+// Reviews
+if(isset($_POST['add-review'])) {
+	if(isset($_SESSION['logged-in']) && $_SESSION['logged-in'] == true) {
+		$text = $_POST['review'];
+		$rating = $_POST['rating'];
+		$product_id = $_GET['id'];
+		$user_id = $_SESSION['user-id'];
+		$review_obj->add_review($user_id, $product_id, $text, $rating);
+	} else {
+		header('Location: login.php');
+		die;
+	}
+}
+
+if(isset($_POST['review_id'])) {
+	$review_obj->delete_review($_POST['review_id']);
+}
+
+// Images
 if(isset($_POST['del-img'])) {
 	$img_id = $_POST['del-img'];
 	$image_obj->delete_img($img_id);
@@ -92,17 +111,27 @@ include_once('partials/header.php');
 					<div class="col-md-5">
 						<div class="product-details">
 							<h2 class="product-name"><?php echo $product->product_name; ?></h2>
+
 							<div>
 								<div class="product-rating">
 									<?php echo $rating_obj->avg_rating($product->id, true); ?>
 								</div>
-								<a class="review-link" href="#"><?php echo count($reviews_obj->select($product->id)) ?> Review(s) | Add your review</a>
+								<a class="review-link" href="#"><?php echo count($review_obj->select($product->id)) ?> Review(s) | Add your review</a>
 							</div>
+
 							<div>
 								<h3 class="product-price"><?php echo $product->price; ?></h3>
 								<span class="product-available">In Stock</span>
 							</div>
+
+
 							<p><?php echo $product->description; ?></p>
+							<?php if(isset($_SESSION['is-admin']) && $_SESSION['is-admin'] == 1): ?>
+								<form class="admin-details" action="edit-desc.php" method="POST">
+									<button class="admin-btn primary-btn" type="submit" name="product_id", value="<?php echo $product->id ?>">Edit Description</button>
+								</form>
+							<?php endif; ?>
+
 
 							<div class="product-options">
 								<?php 
@@ -128,11 +157,7 @@ include_once('partials/header.php');
 									<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 								</form>
 							</div>
-
-							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-							</ul>
-
+							
 							<ul class="product-links">
 								<li>Category:</li>
 								<li><a href="store.php?category=<?php echo $product->category_name; ?>"><?php echo $product->category_name; ?></a></li>
@@ -144,8 +169,8 @@ include_once('partials/header.php');
 					<?php if(isset($_SESSION['logged-in']) && $_SESSION['is-admin'] == 1): ?>
 					<div class="col-md-12">
 						<form class="admin-details" action="add-img.php" method="POST">
-							<button class="admin-btn primary-btn" type="submit" name="product_id", value="<?php echo $product->product_id ?>">Add image</button>
-						</for>
+							<button class="admin-btn primary-btn" type="submit" name="product_id", value="<?php echo $product->id ?>">Add image</button>
+						</form>
 					</div>
 					<?php endif; ?>
 
@@ -154,7 +179,7 @@ include_once('partials/header.php');
 						<div id="product-tab">
 							<!-- product tab nav -->
 							<ul class="tab-nav">
-								<li><a data-toggle="tab" href="#tab1">Reviews (<?php echo count($reviews_obj->select($product->id)) ?>)</a></li>
+								<li><a data-toggle="tab" href="#tab1">Reviews (<?php echo count($review_obj->select($product->id)) ?>)</a></li>
 							</ul>
 							<!-- /product tab nav -->
 
@@ -163,7 +188,7 @@ include_once('partials/header.php');
 								<!-- tab1 -->
 								<div id="tab1" class="tab-pane fade in">
 									<div class="row">
-										<?php if(count($reviews_obj->select($product->id)) > 0): ?>
+										<?php if(count($review_obj->select($product->id)) > 0): ?>
 											<!-- Rating -->
 											<div class="col-md-3">
 												<div id="rating">
@@ -204,7 +229,7 @@ include_once('partials/header.php');
 											<div class="col-md-6">
 												<div id="reviews">
 													<ul class="reviews">
-														<?php echo $reviews_obj->get_reviews($product->id); ?>
+														<?php echo $review_obj->get_reviews($product->id); ?>
 													</ul>
 													<ul class="reviews-pagination">
 														<?php $pagination_obj->pagination(); ?> 
@@ -217,8 +242,8 @@ include_once('partials/header.php');
 											<!-- Review Form -->
 											<div class="col-md-3">
 												<div id="review-form">
-													<form class="review-form">
-														<textarea class="input" placeholder="Your Review"></textarea>
+													<form class="review-form" method="POST">
+														<textarea class="input" name="review" placeholder="Your Review"></textarea>
 														<div class="input-rating">
 															<span>Your Rating: </span>
 															<div class="stars">
@@ -229,7 +254,7 @@ include_once('partials/header.php');
 																<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
 															</div>
 														</div>
-														<button class="primary-btn">Submit</button>
+														<button class="primary-btn" name="add-review">Submit</button>
 													</form>
 												</div>
 											</div>
@@ -268,7 +293,7 @@ include_once('partials/header.php');
 							<!-- tab -->
 							<div id="tab2" class="tab-pane fade in active">
 								<div class="products-slick" data-nav="#slick-nav-2">
-									<?php echo $slider_obj->get_slider_items($product->category_name); ?>
+									<?php echo $slider_obj->get_slider_items($product->category_name, $product->id); ?>
 								</div>
 							</div>
 							<!-- /tab -->

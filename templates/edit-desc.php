@@ -1,26 +1,25 @@
 <?php
 require_once('../_inc/config.php');
 
-$image_obj = new Image();
+$product_obj = new Product();
 
 if(!isset($_SESSION['is-admin']) || $_SESSION['is-admin'] == 0) {
 	header('Location: error.php');
 	die;
 }
 
-if(!isset($_POST['img_id']) || $image_obj->get_img($_POST['img_id']) == false) {
-	header('Location: error.php');
-	die;
+if(isset($_POST['desc'], $_POST['product_id'])) {
+	if($product_obj->edit_product_desc($_POST['desc'], $_POST['product_id'])) {
+		header('Location: product.php?id='. $_POST['product_id']);
+		die;
+	} else {
+		$_SESSION['desc-edited'] = '<p>Something went wrong!</p>';
+	}
 }
 
-if(isset($_POST['edit-img'])) {
-	$img = $_POST['image'];
-	$img_id = $_POST['img_id'];
-	if($image_obj->edit_img($img_id, $img)) {
-		$_SESSION['img-edited'] = '<p>Image is succesfully edited!</p>';
-	} else {
-		$_SESSION['img-edited'] = '<p>Something went wrong!</p>';
-	}
+if(isset($_POST['product_id'])) {
+    $product = $product_obj->get_product($_POST['product_id']);
+	$desc = $product->description;
 }
 
 include_once('partials/header.php');
@@ -50,29 +49,27 @@ include_once('partials/header.php');
 		<div class="section">
 			<!-- container -->
 			<div class="container">
-				<!-- row -->
                     <!-- Billing Details -->
                     <div class="row">
                         <div class="center-form">
 							<form method="POST">
 								<div class="section-title">
-									<h3 class="title">Edit Image</h3>
+									<h3 class="title">Edit Description</h3>
 								</div>
 								<div class="form-group">
-									<input class="input" type="text" name="image" placeholder="Image Path">
+									<textarea class="input" name="desc" placeholder="Write Your Description"><?php echo $desc ?></textarea>
 								</div>
-								<input type="hidden" name="img_id" value="<?php echo $_POST['img_id'] ?>">
-								<button class="primary-btn" type="submit" name="edit-img">Edit</button>
+								<button class="primary-btn" type="submit" name="product_id" value="<?php echo $_POST['product_id'] ?>">Save</button>
 							</form>
 							<div>
-                            	<a href="product.php?id=<?php echo $_GET['id']; ?>">Back To Product</a>
+                            	<a href="product.php?id=<?php echo $_POST['product_id']; ?>">Back To Product</a>
                         	</div>
 
 							<?php
 							
-							if(isset($_SESSION['img-edited'])) {
-								echo $_SESSION['img-edited'];
-								unset($_SESSION['img-edited']);
+							if(isset($_SESSION['desc-edited'])) {
+								echo $_SESSION['desc-edited'];
+								unset($_SESSION['desc-edited']);
 							}
 
 							?>
