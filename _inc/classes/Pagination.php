@@ -41,20 +41,18 @@ class Pagination extends Database {
 
         if ($pages > 1) {
             if ($this->cur_page > 1) {
-                echo '<li><a href="#"><</a></li>';
+                echo '<li><a href="store.php?page='. $this->cur_page+1 .'"><</a></li>';
             }
             if ($this->cur_page - 1 > 0) {
-                echo '<li><a href="#">' .$this->cur_page-1 .'</a></li>';
+                echo '<li><a href="store.php?page='. $this->cur_page-1 .'">' .$this->cur_page-1 .'</a></li>';
             }
 
             echo '<li class="active">' .$this->cur_page .'</li>';
             
             if ($this->cur_page < $pages) {
-                echo '<li><a href="#">' .$this->cur_page+1 .'</a></li>';
-                echo '<li><a href="#"><i class="fa fa-angle-right"></i></a></li>';
+                echo '<li><a href="store.php?page='. $this->cur_page+1 .'">' .$this->cur_page+1 .'</a></li>';
+                echo '<li><a href="store.php?page='. $this->cur_page+1 .'"><i class="fa fa-angle-right"></i></a></li>';
             }
         }
     }
 }
-
-?>

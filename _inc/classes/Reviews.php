@@ -64,8 +64,14 @@ class Reviews extends Database {
             JOIN review r ON(r.user_id = u.user_id)
             WHERE product_item_id = ?";
 
-            $pagination_obj = new Pagination(5);
-            return $pagination_obj->limit_query($query, $this->cur_page, [$product_id]);
+            $statement = $this->db->prepare($query);
+            $statement->bindParam(1, $product_id);
+            $statement->execute();
+
+            $res = $statement->fetchAll();
+            return $res;
+            // $pagination_obj = new Pagination(5);
+            // return $pagination_obj->limit_query($query, $this->cur_page, [$product_id]);
         } catch (PDOException $e) {
             echo $e->getMessage();
         }

@@ -1,7 +1,7 @@
 <?php
 include_once('partials/header.php');
 $store_obj = new Store();
-$pagination_obj = new Pagination(20);
+$pagination_obj = new Pagination(6);
 $product_obj = new Product();
 
 if(isset($_POST['product_id'])) {

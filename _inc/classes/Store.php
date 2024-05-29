@@ -21,7 +21,7 @@ class Store extends Database {
                 $query .= $this->get_sorted_items();
             }
 
-            $pagination_obj = new Pagination(20);
+            $pagination_obj = new Pagination(6);
             return $pagination_obj->limit_query($query, $this->cur_page);
         } catch (PDOException $e) {
             echo $e->getMessage();

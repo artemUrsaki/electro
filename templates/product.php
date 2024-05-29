@@ -231,9 +231,6 @@ include_once('partials/header.php');
 													<ul class="reviews">
 														<?php echo $review_obj->get_reviews($product->id); ?>
 													</ul>
-													<ul class="reviews-pagination">
-														<?php $pagination_obj->pagination(); ?> 
-													</ul>
 												</div>
 											</div>
 											<!-- /Reviews -->
