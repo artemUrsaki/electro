@@ -145,16 +145,16 @@ include_once('partials/header.php');
 							</div>
 
 							<div class="add-to-cart">
-								<form action="">
+								<form method="POST">
 									<div class="qty-label">
 										Qty
 										<div class="input-number">
-											<input type="number" value="1" max="<?php echo 	$product->qty; ?>">
+											<input type="number" name="qty" value="1" max="<?php echo $product->qty; ?>">
 											<span class="qty-up">+</span>
 											<span class="qty-down">-</span>
 										</div>
 									</div>
-									<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+									<button type="submit" class="add-to-cart-btn" name="cart_product_id" value="<?php echo $_GET['id'] ?>"><i class="fa fa-shopping-cart"></i> add to cart</button>
 								</form>
 							</div>
 							

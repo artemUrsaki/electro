@@ -12,6 +12,7 @@ require_once('classes/Pagination.php');
 require_once('classes/User.php');
 require_once('classes/Product.php');
 require_once('classes/Image.php');
+require_once('classes/Cart.php');
 
 $store_obj = new Store();
 if (isset($_GET['action']) && $_GET['action'] == 'filter') {

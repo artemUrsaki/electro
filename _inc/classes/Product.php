@@ -139,7 +139,9 @@ class Product extends Database {
         $res .= '</div>
         </div>
         <div class="add-to-cart">
-            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+            <form method="POST">
+            <button class="add-to-cart-btn" name="cart_product_id" value="'. $line->id .'"><i class="fa fa-shopping-cart"></i> add to cart</button>
+            </form>
         </div>';
 
         if(isset($_SESSION['is-admin']) && $_SESSION['is-admin'] == 1) {

@@ -1,5 +1,28 @@
 <?php
 require_once('../_inc/config.php');
+
+if(isset($_POST['logout'])) {
+	unset($_SESSION['logged-in'], $_SESSION['is-admin'], $_SESSION['user-id']);
+}
+
+if(isset($_SESSION['logged-in'])) {
+	$cart_obj = new Cart($_SESSION['user-id']);
+}
+
+if(isset($_POST['cart_product_id'])) {
+	if(isset($_SESSION['logged-in'])) {
+		$product_id = $_POST['cart_product_id'];
+		$qty = isset($_POST['qty']) ? $_POST['qty'] : 1;
+		$cart_obj->add_cart($product_id, $qty);
+	} else {
+		header('Location: login.php');
+	}
+}
+
+if(isset($_POST['del_cart_item'])) {
+	$cart_item = $_POST['del_cart_item'];
+	$cart_obj->delete_cart($cart_item);
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +76,7 @@ require_once('../_inc/config.php');
 					<ul class="header-links pull-right">
 						<?php 
 							if(isset($_SESSION['logged-in']) && $_SESSION['logged-in'] == true) {
-								echo '<li><a href="partials/logout.php">Log Out</a></li>';
+								echo '<li><form method="POST"><button name="logout">Log Out</button></form></li>';
 							} else {
 								echo '<li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>';
 							}
@@ -86,24 +109,18 @@ require_once('../_inc/config.php');
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Your Cart</span>
-										<div class="qty">3</div>
 									</a>
 									<div class="cart-dropdown">
+										
 										<?php
-											$cart_list = array(
-												'product01'=>array('Headphones','$980.00'),
-												'product02'=>array('Laptop','$1200.00'),
-											);
-											echo($menu_obj->generate_cart($cart_list));
+										if(isset($_SESSION['logged-in'])) {
+											echo($cart_obj->get_cart());
+										} else {
+											echo '<div class="center-form">
+											<a href="login.php" class="primary-btn">Log In</a>
+											</div>';
+										}
 										?>
-										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
-										</div>
-										<div class="cart-btns">
-											<a href="cart.php">View Cart</a>
-											<a href="checkout.php">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-										</div>
 									</div>
 								</div>
 								<!-- /Cart -->

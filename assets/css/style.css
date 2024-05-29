@@ -160,6 +160,7 @@ textarea.input {
 
 .input-number input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
   height: 40px;
   width: 100%;
   border: 1px solid #E4E7ED;
@@ -445,7 +446,7 @@ textarea.input {
   margin-right: 0px;
 }
 
-.header-links li a {
+.header-links li a, .header-links li form button {
   color: #FFF;
 }
 
@@ -456,6 +457,11 @@ textarea.input {
 .header-links li i {
   color: #D10024;
   margin-right: 5px;
+}
+
+.header-links li form button {
+  background-color: transparent;
+  border: none;
 }
 
 /*----------------------------*\
@@ -633,6 +639,10 @@ textarea.input {
   padding-bottom: 15px;
 }
 
+.cart-list img {
+  height: 60px;
+  width: 60px;
+}
 /*=========================================================
 	03 -> Navigation
 ===========================================================*/

@@ -14,28 +14,19 @@
                             'envelope-o'=>'email@email.com',
                         ),
                         'Categories'=>array(
-                            'Hot Deals'=>'hot-deals.php',
-                            'Laptops'=>'store.php',
-                            'Smartphones'=>'store.php',
-                            'Cameras'=>'store.php',
-                            'Accessories'=>'store.php',
+                            'Laptops'=>'store.php?category=Laptops',
+                            'Smartphones'=>'store.php?category=Smartphones',
+                            'Cameras'=>'store.php?category=Cameras',
+                            'Accessories'=>'store.php?category=Accessories',
                         ),
                         'Information'=>array(
                             'About Us'=>'about.php',
-                            'Contact Us'=>'contact.php',
                             'Privacy Policy'=>'privacy.php',
                             'Terms & Conditions'=>'terms.php',
-                        ),
-                        'Service'=>array(
-                            'My Account'=>'account.php',
-                            'View Cart'=>'cart.php',
-                            'Wishlist'=>'wishlist.php',
-                            'My Order'=>'checkout.php',
-                            'Help'=>'contact.php',
-                        ),
+                        )
                     );
 
-                    $menu_obj->generate_footer(4, $footer_list);
+                    $menu_obj->generate_footer(3, $footer_list);
 
                     ?>
 

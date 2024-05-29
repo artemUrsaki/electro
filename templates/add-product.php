@@ -8,10 +8,10 @@ if(!isset($_SESSION['logged-in']) || $_SESSION['is-admin'] == 0) {
 
 $product_obj = new Product();
 if(isset($_POST['add-product'])) {
-    $brand = $_POST['brand'];
+    $brand = strtoupper($_POST['brand']);
     $name = $_POST['name'];
     $category = $_POST['category'];
-    $colour = $_POST['colour'];
+    $colour = ucfirst($_POST['colour']);
     $size = $_POST['size'];
     $qty = $_POST['qty'];
     $image = $_POST['image'];
